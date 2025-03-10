@@ -1,7 +1,6 @@
 package com.example.lelele.di
 
 import android.app.Application
-import androidx.lifecycle.ViewModel
 import com.example.lelele.presentation.MainActivity
 import dagger.BindsInstance
 import dagger.Component

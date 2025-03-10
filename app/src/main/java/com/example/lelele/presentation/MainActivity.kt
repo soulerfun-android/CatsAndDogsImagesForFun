@@ -1,13 +1,8 @@
 package com.example.lelele.presentation
 
-import android.net.ConnectivityManager
-import android.net.Network
 import android.os.Bundle
-import android.util.Log
-import android.view.View
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.example.lelele.databinding.ActivityMainBinding
