@@ -1,9 +1,13 @@
 package com.example.lelele.presentation
 
+import android.net.ConnectivityManager
+import android.net.Network
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.example.lelele.databinding.ActivityMainBinding
@@ -22,6 +26,8 @@ class MainActivity : AppCompatActivity() {
     lateinit var viewModelFactory: ViewModelFactory
     private lateinit var viewModel: MainViewModel
 
+    private var flag = true
+
     private val component by lazy {
         (application as App).component
     }
@@ -32,10 +38,22 @@ class MainActivity : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(binding.root)
         viewModel = ViewModelProvider(this, viewModelFactory).get(MainViewModel::class.java)
+        loadDogPicture()
+        changeTypeOfAnimal()
+        changePicture()
+    }
 
-        var flag = true
-        binding.changeTypeOfAnimalButton.text = DOG
+    private fun changePicture() {
+        binding.changePicture.setOnClickListener {
+            if (flag) {
+                loadDogPicture()
+            } else {
+                loadCatPicture()
+            }
+        }
+    }
 
+    private fun changeTypeOfAnimal() {
         binding.changeTypeOfAnimalButton.setOnClickListener {
             if (flag) {
                 binding.changeTypeOfAnimalButton.text = CAT
@@ -45,16 +63,8 @@ class MainActivity : AppCompatActivity() {
                 flag = true
             }
         }
-
-        loadPicture()
-        binding.changePicture.setOnClickListener {
-            if (flag) {
-                loadPicture()
-            } else {
-                loadCatPicture()
-            }
-        }
     }
+
 
     private fun loadCatPicture() {
         CoroutineScope(Dispatchers.IO).launch {
@@ -67,7 +77,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun loadPicture() {
+    private fun loadDogPicture() {
         CoroutineScope(Dispatchers.IO).launch {
             val response = viewModel.getDogImage()
             runOnUiThread {
