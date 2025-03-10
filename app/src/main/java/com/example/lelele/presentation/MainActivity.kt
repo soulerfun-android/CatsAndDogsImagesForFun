@@ -1,16 +1,10 @@
 package com.example.lelele.presentation
 
-import android.content.Context
-import android.net.ConnectivityManager
-import android.net.NetworkCapabilities
 import android.os.Bundle
 import android.util.Log
-import android.view.View
-import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
-import androidx.transition.Visibility
 import com.bumptech.glide.Glide
 import com.example.lelele.databinding.ActivityMainBinding
 import kotlinx.coroutines.CoroutineScope
@@ -39,20 +33,36 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
         viewModel = ViewModelProvider(this, viewModelFactory).get(MainViewModel::class.java)
 
-        loadCatPicture()
+        var flag = true
+        binding.changeTypeOfAnimalButton.text = DOG
+
+        binding.changeTypeOfAnimalButton.setOnClickListener {
+            if (flag) {
+                binding.changeTypeOfAnimalButton.text = CAT
+                flag = false
+            } else {
+                binding.changeTypeOfAnimalButton.text = DOG
+                flag = true
+            }
+        }
 
         loadPicture()
         binding.changePicture.setOnClickListener {
-            loadPicture()
+            if (flag) {
+                loadPicture()
+            } else {
+                loadCatPicture()
+            }
         }
-
     }
 
     private fun loadCatPicture() {
         CoroutineScope(Dispatchers.IO).launch {
             val response = viewModel.getCatImage()
             for (image in response) {
-                Log.d("MainActivity", "Response ${image.url}")
+                runOnUiThread {
+                    setPicture(image.url)
+                }
             }
         }
     }
@@ -70,5 +80,10 @@ class MainActivity : AppCompatActivity() {
         Glide.with(this@MainActivity)
             .load(pictureUrl)
             .into(binding.imageView)
+    }
+
+    companion object {
+        private const val DOG = "DOG"
+        private const val CAT = "CAT"
     }
 }
