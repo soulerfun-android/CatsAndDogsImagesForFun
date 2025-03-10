@@ -11,11 +11,12 @@ class RepositoryImpl @Inject constructor(
     private val mapper: Mapper
 ) : Repository {
     override suspend fun getDogImage(): DogImage {
-        val dogImageDto = ApiFactory.apiService.getRandomDogImage()
-        return mapper.mapDtoToEntity(dogImageDto)
+        val dogImageDto = ApiFactory.apiServiceDog.getRandomDogImage()
+        return mapper.mapDtoToEntityDog(dogImageDto)
     }
 
-    override fun getCatImage(): CatImage {
-        TODO("Not yet implemented")
+    override suspend fun getCatImage(): List<CatImage> {
+        val catImageDto = ApiFactory.apiServiceCat.getRandomCatImage()
+        return mapper.mapDtoToEntityCat(catImageDto)
     }
 }

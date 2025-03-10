@@ -6,5 +6,5 @@ import com.example.lelele.domain.entities.DogImage
 interface Repository {
     suspend fun getDogImage(): DogImage
 
-    fun getCatImage(): CatImage
+    suspend fun getCatImage(): List<CatImage>
 }

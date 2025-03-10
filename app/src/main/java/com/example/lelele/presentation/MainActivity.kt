@@ -1,10 +1,16 @@
 package com.example.lelele.presentation
 
+import android.content.Context
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import android.os.Bundle
 import android.util.Log
+import android.view.View
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
+import androidx.transition.Visibility
 import com.bumptech.glide.Glide
 import com.example.lelele.databinding.ActivityMainBinding
 import kotlinx.coroutines.CoroutineScope
@@ -21,6 +27,7 @@ class MainActivity : AppCompatActivity() {
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
     private lateinit var viewModel: MainViewModel
+
     private val component by lazy {
         (application as App).component
     }
@@ -30,16 +37,31 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(binding.root)
-
         viewModel = ViewModelProvider(this, viewModelFactory).get(MainViewModel::class.java)
 
+        loadCatPicture()
+
+        loadPicture()
         binding.changePicture.setOnClickListener {
-            CoroutineScope(Dispatchers.IO).launch {
-                val response = viewModel.getDogImage()
-                Log.d("MainActivity", response.toString())
-                runOnUiThread {
-                    setPicture(response.message)
-                }
+            loadPicture()
+        }
+
+    }
+
+    private fun loadCatPicture() {
+        CoroutineScope(Dispatchers.IO).launch {
+            val response = viewModel.getCatImage()
+            for (image in response) {
+                Log.d("MainActivity", "Response ${image.url}")
+            }
+        }
+    }
+
+    private fun loadPicture() {
+        CoroutineScope(Dispatchers.IO).launch {
+            val response = viewModel.getDogImage()
+            runOnUiThread {
+                setPicture(response.message)
             }
         }
     }
