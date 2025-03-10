@@ -56,4 +56,7 @@ dependencies {
     implementation("com.github.bumptech.glide:glide:4.16.0")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.8.7")
     kapt("com.github.bumptech.glide:compiler:4.12.0")
+
+    implementation("com.google.dagger:dagger:2.55")
+    kapt("com.google.dagger:dagger-compiler:2.55")
 }
