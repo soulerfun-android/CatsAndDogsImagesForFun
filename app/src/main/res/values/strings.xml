@@ -6,4 +6,5 @@
     <string name="dog">DOG</string>
     <string name="star_content_description">star</string>
     <string name="back_button">BACK</string>
+    <string name="collection_button">COLLECTION</string>
 </resources>
