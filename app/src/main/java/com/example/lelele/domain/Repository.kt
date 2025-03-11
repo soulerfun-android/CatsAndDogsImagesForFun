@@ -7,4 +7,8 @@ interface Repository {
     suspend fun getDogImage(): DogImage
 
     suspend fun getCatImage(): List<CatImage>
+
+    fun deleteImage()
+
+    fun addImage()
 }

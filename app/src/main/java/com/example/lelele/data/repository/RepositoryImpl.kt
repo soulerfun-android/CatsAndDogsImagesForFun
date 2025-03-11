@@ -19,4 +19,12 @@ class RepositoryImpl @Inject constructor(
         val catImageDto = ApiFactory.apiServiceCat.getRandomCatImage()
         return mapper.mapDtoToEntityCat(catImageDto)
     }
+
+    override fun deleteImage() {
+        TODO("Not yet implemented")
+    }
+
+    override fun addImage() {
+        TODO("Not yet implemented")
+    }
 }
