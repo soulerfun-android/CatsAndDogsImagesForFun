@@ -96,7 +96,6 @@ class MainActivity : AppCompatActivity() {
         scope.launch {
             val response = viewModel.getDogImage()
             runOnUiThread {
-                Log.d("MainActivity", "${response.message}")
                 setPicture(response.message)
             }
         }
