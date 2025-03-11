@@ -2,6 +2,7 @@ package com.example.lelele.presentation.MainActivity
 
 import android.content.pm.ActivityInfo
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
@@ -9,6 +10,7 @@ import com.bumptech.glide.Glide
 import com.example.lelele.databinding.ActivityMainBinding
 import com.example.lelele.presentation.App
 import com.example.lelele.presentation.ViewModelFactory
+import com.example.lelele.presentation.collectionActivity.CollectionActivity
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -48,12 +50,11 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
         viewModel = ViewModelProvider(this, viewModelFactory).get(MainViewModel::class.java)
-
         setPortraitOrientation() // Activity умирает при переворотах
         changeTypeOfAnimal()
         loadDogPicture()
         changePicture()
-
+        launchCollectionScreen()
 
     }
 
@@ -95,6 +96,7 @@ class MainActivity : AppCompatActivity() {
         scope.launch {
             val response = viewModel.getDogImage()
             runOnUiThread {
+                Log.d("MainActivity", "${response.message}")
                 setPicture(response.message)
             }
         }
@@ -109,6 +111,13 @@ class MainActivity : AppCompatActivity() {
 
     private fun setPortraitOrientation() {
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+    }
+
+    private fun launchCollectionScreen() {
+        binding.collectionButton.setOnClickListener {
+            val intent = CollectionActivity.newIntent(this)
+            startActivity(intent)
+        }
     }
 
 
