@@ -1,7 +1,7 @@
 package com.example.lelele.di
 
 import android.app.Application
-import com.example.lelele.presentation.MainActivity
+import com.example.lelele.presentation.MainActivity.MainActivity
 import dagger.BindsInstance
 import dagger.Component
 

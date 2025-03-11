@@ -1,11 +1,15 @@
-package com.example.lelele.presentation
+package com.example.lelele.presentation.MainActivity
 
+import android.content.pm.ActivityInfo
 import android.os.Bundle
-import androidx.activity.enableEdgeToEdge
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.example.lelele.databinding.ActivityMainBinding
+import com.example.lelele.presentation.App
+import com.example.lelele.presentation.ViewModelFactory
+import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -13,13 +17,25 @@ import javax.inject.Inject
 
 class MainActivity : AppCompatActivity() {
 
+    private val exceptionHandler =
+        CoroutineExceptionHandler { _, _ ->
+            runOnUiThread {
+                binding.imageView.setImageDrawable(null)
+                binding.errorText.visibility = View.VISIBLE
+                binding.starIv.visibility = View.INVISIBLE
+            }
+        }
+
+    private val scope = CoroutineScope(Dispatchers.IO + exceptionHandler)
+
     private val binding by lazy {
         ActivityMainBinding.inflate(layoutInflater)
     }
 
+    private lateinit var viewModel: MainViewModel
+
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
-    private lateinit var viewModel: MainViewModel
 
     private var flag = true
 
@@ -30,12 +46,15 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         component.inject(this)
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         setContentView(binding.root)
         viewModel = ViewModelProvider(this, viewModelFactory).get(MainViewModel::class.java)
-        loadDogPicture()
+
+        setPortraitOrientation() // Activity умирает при переворотах
         changeTypeOfAnimal()
+        loadDogPicture()
         changePicture()
+
+
     }
 
     private fun changePicture() {
@@ -62,7 +81,7 @@ class MainActivity : AppCompatActivity() {
 
 
     private fun loadCatPicture() {
-        CoroutineScope(Dispatchers.IO).launch {
+        scope.launch {
             val response = viewModel.getCatImage()
             for (image in response) {
                 runOnUiThread {
@@ -73,12 +92,13 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun loadDogPicture() {
-        CoroutineScope(Dispatchers.IO).launch {
+        scope.launch {
             val response = viewModel.getDogImage()
             runOnUiThread {
                 setPicture(response.message)
             }
         }
+
     }
 
     private fun setPicture(pictureUrl: String) {
@@ -86,6 +106,11 @@ class MainActivity : AppCompatActivity() {
             .load(pictureUrl)
             .into(binding.imageView)
     }
+
+    private fun setPortraitOrientation() {
+        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+    }
+
 
     companion object {
         private const val DOG = "DOG"

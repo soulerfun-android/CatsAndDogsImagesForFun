@@ -1,4 +1,4 @@
-package com.example.lelele.presentation
+package com.example.lelele.presentation.MainActivity
 
 import androidx.lifecycle.ViewModel
 import com.example.lelele.domain.GetCatImageUseCase
@@ -11,6 +11,7 @@ class MainViewModel @Inject constructor(
     private val getDogImageUseCase: GetDogImageUseCase,
     private val getCatImageUseCase: GetCatImageUseCase
 ) : ViewModel() {
+
 
     suspend fun getDogImage(): DogImage {
         return getDogImageUseCase.getDogImage()
