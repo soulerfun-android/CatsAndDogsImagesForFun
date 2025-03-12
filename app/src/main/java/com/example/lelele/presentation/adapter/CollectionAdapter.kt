@@ -5,9 +5,8 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import com.bumptech.glide.Glide
 import com.example.lelele.R
-import com.example.lelele.domain.entities.DogImage
 
-class CollectionAdapter : ListAdapter<DogImage, CollectionViewHolder>(CollectionDiffCallback()) {
+class CollectionAdapter : ListAdapter<ImageItem, CollectionViewHolder>(CollectionDiffCallback()) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CollectionViewHolder {
         val layout = R.layout.item_star_image
         val view = LayoutInflater.from(parent.context).inflate(layout, parent, false)
@@ -16,9 +15,18 @@ class CollectionAdapter : ListAdapter<DogImage, CollectionViewHolder>(Collection
     }
 
     override fun onBindViewHolder(holder: CollectionViewHolder, position: Int) {
-        val dogImage = getItem(position)
-        Glide.with(holder.ivPicture.context)
-            .load(dogImage.message)
-            .into(holder.ivPicture)
+        when (val image = getItem(position)) {
+            is ImageItem.DogImageItem -> {
+                Glide.with(holder.ivPicture.context)
+                    .load(image.item.message)
+                    .into(holder.ivPicture)
+            }
+
+            is ImageItem.CatImageItem -> {
+                Glide.with(holder.ivPicture.context)
+                    .load(image.item.url)
+                    .into(holder.ivPicture)
+            }
+        }
     }
 }
