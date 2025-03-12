@@ -1,12 +1,16 @@
 package com.example.lelele.presentation.MainActivity
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.lelele.domain.usecases.GetCatImageUseCase
 import com.example.lelele.domain.usecases.GetDogImageUseCase
 import com.example.lelele.domain.entities.ImageItem
 import com.example.lelele.domain.usecases.AddImageUseCase
+import com.example.lelele.domain.usecases.DeleteImageUseCase
+import com.example.lelele.domain.usecases.GetImageItemUseCase
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -18,7 +22,9 @@ import javax.inject.Inject
 class MainViewModel @Inject constructor(
     private val getDogImageUseCase: GetDogImageUseCase,
     private val getCatImageUseCase: GetCatImageUseCase,
-    private val addImageUseCase: AddImageUseCase
+    private val addImageUseCase: AddImageUseCase,
+    private val getImageItemUseCase: GetImageItemUseCase,
+    private val deleteImageUseCase: DeleteImageUseCase
 ) : ViewModel() {
 
     private val exceptionHandler =
@@ -30,13 +36,14 @@ class MainViewModel @Inject constructor(
 
     private val scope = CoroutineScope(Dispatchers.IO + exceptionHandler + viewModelJob)
 
-    private var _catImageLD = MutableLiveData<ImageItem>()
-    val catImageLD: LiveData<ImageItem>
-        get() = _catImageLD
+    private var _imageLD = MutableLiveData<ImageItem>()
+    val imageLD: LiveData<ImageItem>
+        get() = _imageLD
 
-    private var _dogImageLD = MutableLiveData<ImageItem>()
-    val dogImageLD: LiveData<ImageItem>
-        get() = _dogImageLD
+    private var _imageFromDBLD = MutableLiveData<ImageItem>()
+    val imageFromDBLD: LiveData<ImageItem>
+        get() = _imageFromDBLD
+
 
     private var _exceptionLD = MutableLiveData<Boolean>()
     val exceptionLD: LiveData<Boolean>
@@ -45,20 +52,33 @@ class MainViewModel @Inject constructor(
 
     fun getDogImage() {
         scope.launch {
-            _dogImageLD.postValue(getDogImageUseCase.getDogImage())
+            _imageLD.postValue(getDogImageUseCase.getDogImage())
             _exceptionLD.postValue(false)
         }
     }
 
     fun getCatImage() {
         scope.launch {
-            _catImageLD.postValue(getCatImageUseCase.getCatImage())
+            _imageLD.postValue(getCatImageUseCase.getCatImage())
             _exceptionLD.postValue(false)
         }
     }
 
-    private fun addImage(imageItem: ImageItem) {
-        addImageUseCase.addImage(imageItem)
+    fun getImageItemFromDb(idImageItem: Int) {
+        scope.launch {
+            try {
+                val image = getImageItemUseCase.getImageItem(idImageItem)
+                _imageFromDBLD.postValue(image)
+            } catch (_: Exception) {
+
+            }
+        }
+    }
+
+    fun addImage(imageItem: ImageItem) {
+        scope.launch {
+            addImageUseCase.addImage(imageItem)
+        }
     }
 
     override fun onCleared() {

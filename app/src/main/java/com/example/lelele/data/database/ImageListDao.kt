@@ -17,4 +17,7 @@ interface ImageListDao {
 
     @Query("DELETE FROM image_items WHERE id=:imageItemId")
     fun deleteImageItem(imageItemId: Int)
+
+    @Query("SELECT * FROM image_items WHERE id=:imageItemItemId LIMIT 1")
+    fun getImageItem(imageItemItemId: Int): ImageItemDbModel
 }

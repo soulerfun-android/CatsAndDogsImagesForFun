@@ -2,11 +2,14 @@ package com.example.lelele.presentation.MainActivity
 
 import android.content.pm.ActivityInfo
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
+import com.example.lelele.R
 import com.example.lelele.databinding.ActivityMainBinding
+import com.example.lelele.domain.entities.ImageItem
 import com.example.lelele.presentation.App
 import com.example.lelele.presentation.ViewModelFactory
 import com.example.lelele.presentation.collectionActivity.CollectionActivity
@@ -46,6 +49,9 @@ class MainActivity : AppCompatActivity() {
         launchCollectionScreen()
         showError()
 
+        binding.starIv.setOnClickListener {
+            viewModel.addImage(viewModel.imageLD.value!!)
+        }
     }
 
     private fun showError() {
@@ -89,16 +95,17 @@ class MainActivity : AppCompatActivity() {
 
     private fun loadDogPicture() {
         viewModel.getDogImage()
-
     }
 
     private fun funLoadPictureWhenGetOne() {
-        viewModel.dogImageLD.observe(this) {
-            val url = viewModel.dogImageLD.value?.url ?: throw RuntimeException("Url not found")
+        viewModel.imageLD.observe(this) {
+            val url = viewModel.imageLD.value?.url ?: throw RuntimeException("Url not found")
+            viewModel.getImageItemFromDb(it.id)
             setPicture(url)
         }
-        viewModel.catImageLD.observe(this) {
-            val url = viewModel.catImageLD.value?.url ?: throw RuntimeException("Url not found")
+        viewModel.imageLD.observe(this) {
+            val url = viewModel.imageLD.value?.url ?: throw RuntimeException("Url not found")
+            viewModel.getImageItemFromDb(it.id)
             setPicture(url)
         }
     }
