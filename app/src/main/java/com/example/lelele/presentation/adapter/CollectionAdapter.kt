@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import com.bumptech.glide.Glide
 import com.example.lelele.R
+import com.example.lelele.domain.entities.ImageItem
 
 class CollectionAdapter : ListAdapter<ImageItem, CollectionViewHolder>(CollectionDiffCallback()) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CollectionViewHolder {

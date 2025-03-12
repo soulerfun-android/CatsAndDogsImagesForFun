@@ -1,6 +1,7 @@
 package com.example.lelele.presentation.adapter
 
 import androidx.recyclerview.widget.DiffUtil
+import com.example.lelele.domain.entities.ImageItem
 
 class CollectionDiffCallback : DiffUtil.ItemCallback<ImageItem>() {
 
