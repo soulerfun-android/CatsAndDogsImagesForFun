@@ -13,8 +13,8 @@ interface ImageListDao {
     fun getImageList(): LiveData<List<ImageItemDbModel>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun addShopItem(imageItemDbModel: ImageItemDbModel)
+    fun addImageItem(imageItemDbModel: ImageItemDbModel)
 
     @Query("DELETE FROM image_items WHERE id=:imageItemId")
-    fun deleteShopItem(imageItemId: Int)
+    fun deleteImageItem(imageItemId: Int)
 }

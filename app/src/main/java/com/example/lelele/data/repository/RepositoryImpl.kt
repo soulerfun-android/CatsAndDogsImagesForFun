@@ -1,6 +1,9 @@
 package com.example.lelele.data.repository
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.map
+import androidx.lifecycle.switchMap
+import com.example.lelele.data.database.ImageItemDbModel
 import com.example.lelele.data.database.ImageListDao
 import com.example.lelele.data.mapper.Mapper
 import com.example.lelele.data.network.apiservices.CatApiService
@@ -8,6 +11,7 @@ import com.example.lelele.data.network.apiservices.DogApiService
 import com.example.lelele.domain.Repository
 import com.example.lelele.domain.entities.ImageItem
 import javax.inject.Inject
+
 
 class RepositoryImpl @Inject constructor(
     private val mapper: Mapper,
@@ -26,15 +30,15 @@ class RepositoryImpl @Inject constructor(
     }
 
     override fun deleteImage(image: ImageItem) {
-        TODO("Not yet implemented")
+        imageListDao.deleteImageItem(image.id)
     }
 
     override fun addImage(image: ImageItem) {
-        TODO("Not yet implemented")
+        imageListDao.addImageItem(mapper.mapEntityToDbModel(image))
     }
 
-    override fun getImageList(): LiveData<List<ImageItem>> {
-        TODO("Not yet implemented")
+    override fun getImageList(): LiveData<List<ImageItem>> = imageListDao.getImageList().map {
+        mapper.mapListDbModelToListEntity(it)
     }
-
 }
+
