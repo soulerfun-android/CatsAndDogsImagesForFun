@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">Lelele</string>
+    <string name="change_picture">CHANGE PICTURE</string>
+    <string name="description_content">description</string>
+    <string name="check_your_internet_connection">Check your internet connection and restart application</string>
+    <string name="dog">DOG</string>
+    <string name="star_content_description">star</string>
+    <string name="back_button">BACK</string>
+    <string name="collection_button">COLLECTION</string>
 </resources>
