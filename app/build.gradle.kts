@@ -66,11 +66,12 @@ dependencies {
     implementation(libs.androidx.room.ktx)
 
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.5.0")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.0")
     kapt("androidx.lifecycle:lifecycle-compiler:2.5.0")
 
     implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
     implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.7")
+
 
 
 }

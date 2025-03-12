@@ -14,21 +14,11 @@ import com.example.lelele.presentation.collectionActivity.CollectionActivity
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class MainActivity : AppCompatActivity() {
-
-    private val exceptionHandler =
-        CoroutineExceptionHandler { _, _ ->
-            runOnUiThread {
-                binding.imageView.setImageDrawable(null)
-                binding.errorText.visibility = View.VISIBLE
-                binding.starIv.visibility = View.INVISIBLE
-            }
-        }
-
-    private val scope = CoroutineScope(Dispatchers.IO + exceptionHandler)
 
     private val binding by lazy {
         ActivityMainBinding.inflate(layoutInflater)
@@ -50,12 +40,32 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
         viewModel = ViewModelProvider(this, viewModelFactory).get(MainViewModel::class.java)
+
         setPortraitOrientation() // Activity умирает при переворотах
         changeTypeOfAnimal()
+
         loadDogPicture()
+
         changePicture()
+
         launchCollectionScreen()
 
+        funLoadPictureWhenGetOne()
+        showError()
+
+    }
+
+    private fun showError() {
+        viewModel.exceptionLD.observe(this) {
+            if (viewModel.exceptionLD.value ?: throw RuntimeException("Error in exception LD")) {
+                binding.imageView.setImageDrawable(null)
+                binding.errorText.visibility = View.VISIBLE
+                binding.starIv.visibility = View.GONE
+            } else {
+                binding.errorText.visibility = View.INVISIBLE
+                binding.starIv.visibility = View.VISIBLE
+            }
+        }
     }
 
     private fun changePicture() {
@@ -82,22 +92,23 @@ class MainActivity : AppCompatActivity() {
 
 
     private fun loadCatPicture() {
-        viewModelScope.launch {
-            val response = viewModel.getCatImage()
-            runOnUiThread {
-                setPicture(response.url)
-            }
-        }
+        viewModel.getCatImage()
     }
 
     private fun loadDogPicture() {
-        scope.launch {
-            val response = viewModel.getDogImage()
-            runOnUiThread {
-                setPicture(response.url)
-            }
-        }
+        viewModel.getDogImage()
 
+    }
+
+    private fun funLoadPictureWhenGetOne() {
+        viewModel.dogImageLD.observe(this) {
+            val url = viewModel.dogImageLD.value?.url ?: throw RuntimeException("Url not found")
+            setPicture(url)
+        }
+        viewModel.catImageLD.observe(this) {
+            val url = viewModel.catImageLD.value?.url ?: throw RuntimeException("Url not found")
+            setPicture(url)
+        }
     }
 
     private fun setPicture(pictureUrl: String) {
