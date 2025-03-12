@@ -2,6 +2,7 @@ package com.example.lelele.di
 
 import android.app.Application
 import com.example.lelele.presentation.MainActivity.MainActivity
+import com.example.lelele.presentation.collectionActivity.CollectionActivity
 import dagger.BindsInstance
 import dagger.Component
 
@@ -10,6 +11,8 @@ import dagger.Component
 interface ApplicationComponent {
 
     fun inject(activity: MainActivity)
+
+    fun inject(activity: CollectionActivity)
 
     @Component.Factory
     interface Factory {

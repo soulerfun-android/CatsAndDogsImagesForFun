@@ -1,25 +1,24 @@
 package com.example.lelele.presentation.MainActivity
 
-import android.media.Image
-import android.view.View
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.example.lelele.domain.GetCatImageUseCase
-import com.example.lelele.domain.GetDogImageUseCase
+import com.example.lelele.domain.usecases.GetCatImageUseCase
+import com.example.lelele.domain.usecases.GetDogImageUseCase
 import com.example.lelele.domain.entities.ImageItem
+import com.example.lelele.domain.usecases.AddImageUseCase
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class MainViewModel @Inject constructor(
     private val getDogImageUseCase: GetDogImageUseCase,
-    private val getCatImageUseCase: GetCatImageUseCase
+    private val getCatImageUseCase: GetCatImageUseCase,
+    private val addImageUseCase: AddImageUseCase
 ) : ViewModel() {
 
     private val exceptionHandler =
@@ -58,5 +57,12 @@ class MainViewModel @Inject constructor(
         }
     }
 
+    private fun addImage(imageItem: ImageItem) {
+        addImageUseCase.addImage(imageItem)
+    }
 
+    override fun onCleared() {
+        super.onCleared()
+        scope.cancel()
+    }
 }

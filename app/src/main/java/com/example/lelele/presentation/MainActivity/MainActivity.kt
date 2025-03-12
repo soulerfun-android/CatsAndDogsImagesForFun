@@ -2,7 +2,6 @@ package com.example.lelele.presentation.MainActivity
 
 import android.content.pm.ActivityInfo
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
@@ -11,11 +10,6 @@ import com.example.lelele.databinding.ActivityMainBinding
 import com.example.lelele.presentation.App
 import com.example.lelele.presentation.ViewModelFactory
 import com.example.lelele.presentation.collectionActivity.CollectionActivity
-import kotlinx.coroutines.CoroutineExceptionHandler
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class MainActivity : AppCompatActivity() {
@@ -42,15 +36,14 @@ class MainActivity : AppCompatActivity() {
         viewModel = ViewModelProvider(this, viewModelFactory).get(MainViewModel::class.java)
 
         setPortraitOrientation() // Activity умирает при переворотах
-        changeTypeOfAnimal()
 
         loadDogPicture()
+        funLoadPictureWhenGetOne()
 
         changePicture()
+        changeTypeOfAnimal()
 
         launchCollectionScreen()
-
-        funLoadPictureWhenGetOne()
         showError()
 
     }
@@ -89,7 +82,6 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
-
 
     private fun loadCatPicture() {
         viewModel.getCatImage()
