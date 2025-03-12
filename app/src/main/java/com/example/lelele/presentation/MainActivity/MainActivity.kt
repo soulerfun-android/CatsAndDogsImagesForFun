@@ -82,7 +82,7 @@ class MainActivity : AppCompatActivity() {
 
 
     private fun loadCatPicture() {
-        scope.launch {
+        viewModelScope.launch {
             val response = viewModel.getCatImage()
             runOnUiThread {
                 setPicture(response.url)
