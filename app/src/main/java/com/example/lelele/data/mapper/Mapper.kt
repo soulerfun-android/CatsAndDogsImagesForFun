@@ -1,5 +1,6 @@
 package com.example.lelele.data.mapper
 
+import com.example.lelele.data.database.ImageItemDbModel
 import com.example.lelele.data.network.model.CatImageDto
 import com.example.lelele.data.network.model.DogImageDto
 import com.example.lelele.domain.entities.ImageItem
@@ -13,10 +14,14 @@ class Mapper @Inject constructor() {
     }
 
     fun mapDtoCatToEntity(dto: List<CatImageDto>): ImageItem {
-        var imageItem = ImageItem(url = "")
+        val imageItem = ImageItem(url = "")
         for (item in dto) {
             imageItem.url = item.url
         }
         return imageItem
+    }
+
+    fun mapEntityToDbModel(imageItem: ImageItem): ImageItemDbModel {
+        return ImageItemDbModel(id = imageItem.id, url = imageItem.url)
     }
 }
