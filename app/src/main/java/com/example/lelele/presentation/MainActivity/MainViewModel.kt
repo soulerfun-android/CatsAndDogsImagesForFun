@@ -1,10 +1,10 @@
 package com.example.lelele.presentation.MainActivity
 
+import android.media.Image
 import androidx.lifecycle.ViewModel
 import com.example.lelele.domain.GetCatImageUseCase
 import com.example.lelele.domain.GetDogImageUseCase
-import com.example.lelele.domain.entities.CatImage
-import com.example.lelele.domain.entities.DogImage
+import com.example.lelele.domain.entities.ImageItem
 import javax.inject.Inject
 
 class MainViewModel @Inject constructor(
@@ -13,11 +13,11 @@ class MainViewModel @Inject constructor(
 ) : ViewModel() {
 
 
-    suspend fun getDogImage(): DogImage {
+    suspend fun getDogImage(): ImageItem {
         return getDogImageUseCase.getDogImage()
     }
 
-    suspend fun getCatImage(): List<CatImage> {
+    suspend fun getCatImage(): ImageItem {
         return getCatImageUseCase.getCatImage()
     }
 

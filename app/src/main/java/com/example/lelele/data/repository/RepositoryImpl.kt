@@ -5,8 +5,6 @@ import com.example.lelele.data.mapper.Mapper
 import com.example.lelele.data.network.apiservices.CatApiService
 import com.example.lelele.data.network.apiservices.DogApiService
 import com.example.lelele.domain.Repository
-import com.example.lelele.domain.entities.CatImage
-import com.example.lelele.domain.entities.DogImage
 import com.example.lelele.domain.entities.ImageItem
 import javax.inject.Inject
 
@@ -15,14 +13,14 @@ class RepositoryImpl @Inject constructor(
     private val dogApiService: DogApiService,
     private val catApiService: CatApiService
 ) : Repository {
-    override suspend fun getDogImage(): DogImage {
+    override suspend fun getDogImage(): ImageItem {
         val dogImageDto = dogApiService.getRandomDogImage()
-        return mapper.mapDtoToEntityDog(dogImageDto)
+        return mapper.mapDtoDogToEntity(dogImageDto)
     }
 
-    override suspend fun getCatImage(): List<CatImage> {
+    override suspend fun getCatImage(): ImageItem {
         val catImageDto = catApiService.getRandomCatImage()
-        return mapper.mapDtoToEntityCat(catImageDto)
+        return mapper.mapDtoCatToEntity(catImageDto)
     }
 
     override fun deleteImage(image: ImageItem) {

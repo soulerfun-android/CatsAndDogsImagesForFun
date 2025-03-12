@@ -16,18 +16,9 @@ class CollectionAdapter : ListAdapter<ImageItem, CollectionViewHolder>(Collectio
     }
 
     override fun onBindViewHolder(holder: CollectionViewHolder, position: Int) {
-        when (val image = getItem(position)) {
-            is ImageItem.DogImageItem -> {
-                Glide.with(holder.ivPicture.context)
-                    .load(image.item.message)
-                    .into(holder.ivPicture)
-            }
-
-            is ImageItem.CatImageItem -> {
-                Glide.with(holder.ivPicture.context)
-                    .load(image.item.url)
-                    .into(holder.ivPicture)
-            }
-        }
+        val image = getItem(position)
+        Glide.with(holder.ivPicture.context)
+            .load(image.url)
+            .into(holder.ivPicture)
     }
 }

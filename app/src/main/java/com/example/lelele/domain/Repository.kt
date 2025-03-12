@@ -1,14 +1,12 @@
 package com.example.lelele.domain
 
 import androidx.lifecycle.LiveData
-import com.example.lelele.domain.entities.CatImage
-import com.example.lelele.domain.entities.DogImage
 import com.example.lelele.domain.entities.ImageItem
 
 interface Repository {
-    suspend fun getDogImage(): DogImage
+    suspend fun getDogImage(): ImageItem
 
-    suspend fun getCatImage(): List<CatImage>
+    suspend fun getCatImage(): ImageItem
 
     fun deleteImage(image: ImageItem)
 

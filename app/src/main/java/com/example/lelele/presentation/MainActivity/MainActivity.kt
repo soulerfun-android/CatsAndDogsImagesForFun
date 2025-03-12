@@ -84,10 +84,8 @@ class MainActivity : AppCompatActivity() {
     private fun loadCatPicture() {
         scope.launch {
             val response = viewModel.getCatImage()
-            for (image in response) {
-                runOnUiThread {
-                    setPicture(image.url)
-                }
+            runOnUiThread {
+                setPicture(response.url)
             }
         }
     }
@@ -96,7 +94,7 @@ class MainActivity : AppCompatActivity() {
         scope.launch {
             val response = viewModel.getDogImage()
             runOnUiThread {
-                setPicture(response.message)
+                setPicture(response.url)
             }
         }
 

@@ -1,6 +1,10 @@
 package com.example.lelele.domain.entities
 
-sealed class ImageItem {
-    data class DogImageItem(val item: DogImage) : ImageItem()
-    data class CatImageItem(val item: CatImage) : ImageItem()
+data class ImageItem(
+    var id: Int = UNDEFINED_ID,
+    var url: String
+) {
+    companion object {
+        private const val UNDEFINED_ID = 0
+    }
 }
