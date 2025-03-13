@@ -29,16 +29,18 @@ class RepositoryImpl @Inject constructor(
         return mapper.mapDtoCatToEntity(catImageDto)
     }
 
-    override fun deleteImage(image: ImageItem) {
-        imageListDao.deleteImageItem(image.id)
+    override fun deleteImage(imageId: Int) {
+        imageListDao.deleteImageItem(imageId)
     }
 
     override fun addImage(image: ImageItem) {
         imageListDao.addImageItem(mapper.mapEntityToDbModel(image))
     }
 
-    override fun getImageItem(imageItemId: Int): ImageItem {
-        return mapper.mapDbModelToEntity(imageListDao.getImageItem(imageItemId))
+    override fun getImageItem(imageId: Int): LiveData<ImageItem> {
+        return imageListDao.getImageItem(imageId).map {
+            mapper.mapDbModelToEntity(it)
+        }
     }
 
     override fun getImageList(): LiveData<List<ImageItem>> = imageListDao.getImageList().map {

@@ -40,12 +40,9 @@ class CollectionActivity : AppCompatActivity() {
         setupAdapter()
         setContentView(binding.root)
         viewModel = ViewModelProvider(this, viewModelFactory).get(CollectionViewModel::class.java)
-        viewModel.imageItems.observe(this) {
-            adapter.submitList(it)
-        }
+        loadDbInAdapter()
         goToBackScreen()
         setupLongClickListener()
-
         setupSwipeListener(binding.recyclerView)
     }
 
@@ -55,15 +52,20 @@ class CollectionActivity : AppCompatActivity() {
         }
     }
 
+    private fun loadDbInAdapter() {
+        viewModel.imageItems.observe(this) {
+            adapter.submitList(it)
+        }
+    }
+
     private fun setupAdapter() {
         adapter = CollectionAdapter()
         binding.recyclerView.adapter = adapter
     }
 
     private fun setupLongClickListener() {
-        adapter.onImageItemLongClickListener = {
+        adapter.onImageItemClickListener = {
             Log.d("CollectionActivity", it.toString())
-            viewModel.deleteImage(it)
         }
     }
 
@@ -80,7 +82,7 @@ class CollectionActivity : AppCompatActivity() {
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 val image = adapter.currentList[viewHolder.adapterPosition]
-                viewModel.deleteImage(image)
+                viewModel.deleteImage(image.id)
             }
         }
         val itemTouchHelper = ItemTouchHelper(callback)

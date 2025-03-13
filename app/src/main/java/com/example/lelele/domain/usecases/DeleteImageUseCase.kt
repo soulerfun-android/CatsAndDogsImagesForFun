@@ -7,7 +7,7 @@ import javax.inject.Inject
 class DeleteImageUseCase @Inject constructor(
     private val repository: Repository
 ) {
-    fun deleteImage(imageItem: ImageItem) {
-        repository.deleteImage(imageItem)
+    fun deleteImage(imageId: Int) {
+        repository.deleteImage(imageId)
     }
 }

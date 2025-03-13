@@ -5,10 +5,10 @@ import com.example.lelele.domain.Repository
 import com.example.lelele.domain.entities.ImageItem
 import javax.inject.Inject
 
-class GetImageItemUseCase @Inject constructor(
+class GetImageItemFromDbUseCase @Inject constructor(
     private val repository: Repository
 ) {
-    fun getImageItem(imageItemId: Int): ImageItem {
-        return repository.getImageItem(imageItemId)
+    fun getImageItemFromDb(imageId: Int): LiveData<ImageItem> {
+        return repository.getImageItem(imageId)
     }
 }

@@ -10,7 +10,7 @@ import com.example.lelele.domain.usecases.GetDogImageUseCase
 import com.example.lelele.domain.entities.ImageItem
 import com.example.lelele.domain.usecases.AddImageUseCase
 import com.example.lelele.domain.usecases.DeleteImageUseCase
-import com.example.lelele.domain.usecases.GetImageItemUseCase
+import com.example.lelele.domain.usecases.GetImageItemFromDbUseCase
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -23,8 +23,9 @@ class MainViewModel @Inject constructor(
     private val getDogImageUseCase: GetDogImageUseCase,
     private val getCatImageUseCase: GetCatImageUseCase,
     private val addImageUseCase: AddImageUseCase,
-    private val getImageItemUseCase: GetImageItemUseCase,
-    private val deleteImageUseCase: DeleteImageUseCase
+    private val deleteImageUseCase: DeleteImageUseCase,
+    private val getImageItemFromDbUseCase: GetImageItemFromDbUseCase
+
 ) : ViewModel() {
 
     private val exceptionHandler =
@@ -40,14 +41,13 @@ class MainViewModel @Inject constructor(
     val imageLD: LiveData<ImageItem>
         get() = _imageLD
 
-    private var _imageFromDBLD = MutableLiveData<ImageItem>()
-    val imageFromDBLD: LiveData<ImageItem>
-        get() = _imageFromDBLD
-
-
     private var _exceptionLD = MutableLiveData<Boolean>()
     val exceptionLD: LiveData<Boolean>
         get() = _exceptionLD
+
+    fun getImageFromDb(imageId: Int): LiveData<ImageItem> {
+        return getImageItemFromDbUseCase.getImageItemFromDb(imageId)
+    }
 
 
     fun getDogImage() {
@@ -64,20 +64,15 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    fun getImageItemFromDb(idImageItem: Int) {
-        scope.launch {
-            try {
-                val image = getImageItemUseCase.getImageItem(idImageItem)
-                _imageFromDBLD.postValue(image)
-            } catch (_: Exception) {
-
-            }
-        }
-    }
-
     fun addImage(imageItem: ImageItem) {
         scope.launch {
             addImageUseCase.addImage(imageItem)
+        }
+    }
+
+    fun deleteImage(imageId: Int) {
+        scope.launch {
+            deleteImageUseCase.deleteImage(imageId)
         }
     }
 

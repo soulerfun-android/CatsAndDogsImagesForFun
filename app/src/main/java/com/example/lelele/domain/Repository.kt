@@ -8,11 +8,11 @@ interface Repository {
 
     suspend fun getCatImage(): ImageItem
 
-    fun deleteImage(image: ImageItem)
+    fun deleteImage(imageId: Int)
 
     fun addImage(image: ImageItem)
 
-    fun getImageItem(imageItemId: Int): ImageItem
+    fun getImageItem(imageId: Int): LiveData<ImageItem>
 
     fun getImageList(): LiveData<List<ImageItem>>
 }

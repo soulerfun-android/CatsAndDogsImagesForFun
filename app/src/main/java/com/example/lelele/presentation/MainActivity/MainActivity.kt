@@ -9,7 +9,6 @@ import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.example.lelele.R
 import com.example.lelele.databinding.ActivityMainBinding
-import com.example.lelele.domain.entities.ImageItem
 import com.example.lelele.presentation.App
 import com.example.lelele.presentation.ViewModelFactory
 import com.example.lelele.presentation.collectionActivity.CollectionActivity
@@ -26,6 +25,7 @@ class MainActivity : AppCompatActivity() {
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
 
+    private var flagCatOrDog = true
     private var flag = true
 
     private val component by lazy {
@@ -49,10 +49,35 @@ class MainActivity : AppCompatActivity() {
         launchCollectionScreen()
         showError()
 
-        binding.starIv.setOnClickListener {
-            viewModel.addImage(viewModel.imageLD.value!!)
+        actionWithCollection()
+
+        binding.testButton.setOnClickListener {
+            val d = viewModel.imageLD.value!!
+            Log.d("test", d.toString())
+            viewModel.deleteImage(d.id)
         }
     }
+
+    private fun actionWithCollection() {
+        binding.starIv.setOnClickListener {
+            if (flag) {
+                Glide.with(this)
+                    .load(R.drawable.empty_star)
+                    .into(binding.starIv)
+                viewModel.addImage(viewModel.imageLD.value!!)
+                Log.d("MainActivity", "${viewModel.imageLD.value}" )
+                flag = false
+            } else {
+                Glide.with(this)
+                    .load(R.drawable.star)
+                    .into(binding.starIv)
+                viewModel.deleteImage(viewModel.imageLD.value!!.id)
+                Log.d("MainActivity", "${viewModel.imageLD.value}" )
+                flag = true
+            }
+        }
+    }
+
 
     private fun showError() {
         viewModel.exceptionLD.observe(this) {
@@ -69,7 +94,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun changePicture() {
         binding.changePicture.setOnClickListener {
-            if (flag) {
+            if (flagCatOrDog) {
                 loadDogPicture()
             } else {
                 loadCatPicture()
@@ -79,12 +104,12 @@ class MainActivity : AppCompatActivity() {
 
     private fun changeTypeOfAnimal() {
         binding.changeTypeOfAnimalButton.setOnClickListener {
-            if (flag) {
+            if (flagCatOrDog) {
                 binding.changeTypeOfAnimalButton.text = CAT
-                flag = false
+                flagCatOrDog = false
             } else {
                 binding.changeTypeOfAnimalButton.text = DOG
-                flag = true
+                flagCatOrDog = true
             }
         }
     }
@@ -100,12 +125,6 @@ class MainActivity : AppCompatActivity() {
     private fun funLoadPictureWhenGetOne() {
         viewModel.imageLD.observe(this) {
             val url = viewModel.imageLD.value?.url ?: throw RuntimeException("Url not found")
-            viewModel.getImageItemFromDb(it.id)
-            setPicture(url)
-        }
-        viewModel.imageLD.observe(this) {
-            val url = viewModel.imageLD.value?.url ?: throw RuntimeException("Url not found")
-            viewModel.getImageItemFromDb(it.id)
             setPicture(url)
         }
     }
