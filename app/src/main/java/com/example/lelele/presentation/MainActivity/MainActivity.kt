@@ -2,7 +2,6 @@ package com.example.lelele.presentation.MainActivity
 
 import android.content.pm.ActivityInfo
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
@@ -54,23 +53,17 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun colorStarAndAddImageInDb() {
-        var imageId = 0
-        viewModel.testLd.observe(this) {
-            imageId = it.id
-        }
-        binding.starIv.setOnClickListener {
-            if (flag) {
-                Glide.with(this)
-                    .load(android.R.drawable.btn_star_big_on)
-                    .into(binding.starIv)
-                viewModel.addImage(viewModel.imageLD.value!!)
-                flag = false
+        viewModel.testLd.observe(this) { imageItem ->
+            if (imageItem == null) {
+                loadEmptyStar()
+                binding.starIv.setOnClickListener {
+                    viewModel.addImage(viewModel.imageLD.value!!)
+                }
             } else {
-                Glide.with(this)
-                    .load(android.R.drawable.btn_star_big_off)
-                    .into(binding.starIv)
-                viewModel.deleteImage(imageId)
-                flag = true
+                loadStar()
+                binding.starIv.setOnClickListener {
+                    viewModel.deleteImage(imageItem.id)
+                }
             }
         }
     }
@@ -89,8 +82,23 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun loadEmptyStar() {
+        Glide.with(this)
+            .load(android.R.drawable.btn_star_big_off)
+            .into(binding.starIv)
+    }
+
+    private fun loadStar() {
+        Glide.with(this)
+            .load(android.R.drawable.btn_star_big_on)
+            .into(binding.starIv)
+    }
+
     private fun changePicture() {
         binding.changePicture.setOnClickListener {
+            Glide.with(this)
+                .load(android.R.drawable.btn_star_big_off)
+                .into(binding.starIv)
             if (flagCatOrDog) {
                 loadDogPicture()
             } else {

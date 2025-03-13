@@ -44,8 +44,8 @@ class MainViewModel @Inject constructor(
         get() = _exceptionLD
 
 
-    private var _testLd = MutableLiveData<ImageItem>()
-    val testLd: LiveData<ImageItem>
+    private var _testLd = MutableLiveData<ImageItem?>()
+    val testLd: LiveData<ImageItem?>
         get() = _testLd
 
 
@@ -53,6 +53,7 @@ class MainViewModel @Inject constructor(
         scope.launch {
             _imageLD.postValue(getDogImageUseCase.getDogImage())
             _exceptionLD.postValue(false)
+            _testLd.postValue(null)
         }
     }
 
@@ -60,6 +61,7 @@ class MainViewModel @Inject constructor(
         scope.launch {
             _imageLD.postValue(getCatImageUseCase.getCatImage())
             _exceptionLD.postValue(false)
+            _testLd.postValue(null)
         }
     }
 
@@ -73,6 +75,7 @@ class MainViewModel @Inject constructor(
     fun deleteImage(imageId: Int) {
         scope.launch {
             deleteImageUseCase.deleteImage(imageId)
+            _testLd.postValue(null)
         }
     }
 

@@ -24,13 +24,15 @@
             android:exported="false" />
         <activity
             android:name=".presentation.MainActivity.MainActivity"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+            android:exported="true"
+            >
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-    </application>
+        <intent-filter>
+            <action android:name="android.intent.action.MAIN" />
 
-</manifest>
+            <category android:name="android.intent.category.LAUNCHER" />
+        </intent-filter>
+    </activity>
+</application>
+
+    </manifest>
