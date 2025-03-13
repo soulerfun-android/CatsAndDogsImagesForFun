@@ -7,4 +7,5 @@
     <string name="star_content_description">star</string>
     <string name="back_button">BACK</string>
     <string name="collection_button">COLLECTION</string>
+    <string name="image">image</string>
 </resources>

@@ -13,6 +13,7 @@ import com.example.lelele.databinding.ActivityCollectionBinding
 import com.example.lelele.presentation.App
 import com.example.lelele.presentation.ViewModelFactory
 import com.example.lelele.presentation.adapter.CollectionAdapter
+import com.example.lelele.presentation.fullscreenactivity.FullScreenImageActivity
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -65,7 +66,8 @@ class CollectionActivity : AppCompatActivity() {
 
     private fun setupLongClickListener() {
         adapter.onImageItemClickListener = {
-            Log.d("CollectionActivity", it.toString())
+            val intent = FullScreenImageActivity.newIntent(this, it.url)
+            startActivity(intent)
         }
     }
 
