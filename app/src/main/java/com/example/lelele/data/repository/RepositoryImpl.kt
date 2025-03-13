@@ -1,5 +1,6 @@
 package com.example.lelele.data.repository
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.map
 import androidx.lifecycle.switchMap
@@ -39,6 +40,11 @@ class RepositoryImpl @Inject constructor(
 
     override fun getImageList(): LiveData<List<ImageItem>> = imageListDao.getImageList().map {
         mapper.mapListDbModelToListEntity(it)
+    }
+
+    override fun getImageItem(imageItemUrl: String): ImageItem {
+        val imageItemDto = imageListDao.getImageItem(imageItemUrl)
+        return mapper.mapDbModelToEntity(imageItemDto)
     }
 }
 

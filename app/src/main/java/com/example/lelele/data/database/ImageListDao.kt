@@ -18,5 +18,8 @@ interface ImageListDao {
     @Query("DELETE FROM image_items WHERE id=:imageItemId")
     fun deleteImageItem(imageItemId: Int)
 
+    @Query("SELECT * FROM image_items WHERE url=:imageItemUrl LIMIT 1")
+    fun getImageItem(imageItemUrl: String): ImageItemDbModel
+
 
 }

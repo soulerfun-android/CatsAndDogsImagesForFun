@@ -7,16 +7,11 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
-import com.example.lelele.R
 import com.example.lelele.databinding.ActivityMainBinding
 import com.example.lelele.presentation.App
 import com.example.lelele.presentation.ViewModelFactory
 import com.example.lelele.presentation.collectionActivity.CollectionActivity
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import javax.inject.Inject
-import kotlin.concurrent.thread
 
 class MainActivity : AppCompatActivity() {
 
@@ -30,6 +25,7 @@ class MainActivity : AppCompatActivity() {
     lateinit var viewModelFactory: ViewModelFactory
 
     private var flagCatOrDog = true
+    private var flag = true
 
     private val component by lazy {
         (application as App).component
@@ -54,18 +50,28 @@ class MainActivity : AppCompatActivity() {
 
         colorStarAndAddImageInDb()
 
+
     }
 
     private fun colorStarAndAddImageInDb() {
-        Glide.with(this)
-            .load(android.R.drawable.btn_star_big_off)
-            .into(binding.starIv)
+        var imageId = 0
+        viewModel.testLd.observe(this) {
+            imageId = it.id
+        }
         binding.starIv.setOnClickListener {
-            Glide.with(this)
-                .load(android.R.drawable.btn_star_big_on)
-                .into(binding.starIv)
-            viewModel.addImage(viewModel.imageLD.value!!)
-            binding.starIv.setOnClickListener(null)
+            if (flag) {
+                Glide.with(this)
+                    .load(android.R.drawable.btn_star_big_on)
+                    .into(binding.starIv)
+                viewModel.addImage(viewModel.imageLD.value!!)
+                flag = false
+            } else {
+                Glide.with(this)
+                    .load(android.R.drawable.btn_star_big_off)
+                    .into(binding.starIv)
+                viewModel.deleteImage(imageId)
+                flag = true
+            }
         }
     }
 
@@ -117,7 +123,6 @@ class MainActivity : AppCompatActivity() {
         viewModel.imageLD.observe(this) {
             val url = viewModel.imageLD.value?.url ?: throw RuntimeException("Url not found")
             setPicture(url)
-            colorStarAndAddImageInDb()
         }
     }
 

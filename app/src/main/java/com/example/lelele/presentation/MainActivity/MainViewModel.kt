@@ -8,6 +8,7 @@ import com.example.lelele.domain.usecases.AddImageUseCase
 import com.example.lelele.domain.usecases.DeleteImageUseCase
 import com.example.lelele.domain.usecases.GetCatImageUseCase
 import com.example.lelele.domain.usecases.GetDogImageUseCase
+import com.example.lelele.domain.usecases.GetImageItemFromDbByUrlUseCase
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -21,6 +22,7 @@ class MainViewModel @Inject constructor(
     private val getCatImageUseCase: GetCatImageUseCase,
     private val addImageUseCase: AddImageUseCase,
     private val deleteImageUseCase: DeleteImageUseCase,
+    private val getImageItemFromDbByUrlUseCase: GetImageItemFromDbByUrlUseCase
 
 ) : ViewModel() {
 
@@ -42,6 +44,11 @@ class MainViewModel @Inject constructor(
         get() = _exceptionLD
 
 
+    private var _testLd = MutableLiveData<ImageItem>()
+    val testLd: LiveData<ImageItem>
+        get() = _testLd
+
+
     fun getDogImage() {
         scope.launch {
             _imageLD.postValue(getDogImageUseCase.getDogImage())
@@ -59,6 +66,7 @@ class MainViewModel @Inject constructor(
     fun addImage(imageItem: ImageItem) {
         scope.launch {
             addImageUseCase.addImage(imageItem)
+            _testLd.postValue(getImageItemFromDbByUrlUseCase.getImageItem(imageItem.url))
         }
     }
 

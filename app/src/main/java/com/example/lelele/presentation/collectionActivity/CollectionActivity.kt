@@ -66,6 +66,7 @@ class CollectionActivity : AppCompatActivity() {
 
     private fun setupLongClickListener() {
         adapter.onImageItemClickListener = {
+            Log.d("TEST", it.toString())
             val intent = FullScreenImageActivity.newIntent(this, it.url)
             startActivity(intent)
         }
