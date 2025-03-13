@@ -2,7 +2,6 @@ package com.example.lelele.presentation.MainActivity
 
 import android.content.pm.ActivityInfo
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
@@ -11,11 +10,6 @@ import com.example.lelele.databinding.ActivityMainBinding
 import com.example.lelele.presentation.App
 import com.example.lelele.presentation.ViewModelFactory
 import com.example.lelele.presentation.collectionActivity.CollectionActivity
-import kotlinx.coroutines.CoroutineExceptionHandler
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class MainActivity : AppCompatActivity() {
@@ -29,6 +23,7 @@ class MainActivity : AppCompatActivity() {
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
 
+    private var flagCatOrDog = true
     private var flag = true
 
     private val component by lazy {
@@ -42,18 +37,37 @@ class MainActivity : AppCompatActivity() {
         viewModel = ViewModelProvider(this, viewModelFactory).get(MainViewModel::class.java)
 
         setPortraitOrientation() // Activity умирает при переворотах
-        changeTypeOfAnimal()
 
         loadDogPicture()
+        funLoadPictureWhenGetOne()
 
         changePicture()
+        changeTypeOfAnimal()
 
         launchCollectionScreen()
-
-        funLoadPictureWhenGetOne()
         showError()
 
+        colorStarAndAddImageInDb()
+
+
     }
+
+    private fun colorStarAndAddImageInDb() {
+        viewModel.testLd.observe(this) { imageItem ->
+            if (imageItem == null) {
+                loadEmptyStar()
+                binding.starIv.setOnClickListener {
+                    viewModel.addImage(viewModel.imageLD.value!!)
+                }
+            } else {
+                loadStar()
+                binding.starIv.setOnClickListener {
+                    viewModel.deleteImage(imageItem.id)
+                }
+            }
+        }
+    }
+
 
     private fun showError() {
         viewModel.exceptionLD.observe(this) {
@@ -68,9 +82,24 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun loadEmptyStar() {
+        Glide.with(this)
+            .load(android.R.drawable.btn_star_big_off)
+            .into(binding.starIv)
+    }
+
+    private fun loadStar() {
+        Glide.with(this)
+            .load(android.R.drawable.btn_star_big_on)
+            .into(binding.starIv)
+    }
+
     private fun changePicture() {
         binding.changePicture.setOnClickListener {
-            if (flag) {
+            Glide.with(this)
+                .load(android.R.drawable.btn_star_big_off)
+                .into(binding.starIv)
+            if (flagCatOrDog) {
                 loadDogPicture()
             } else {
                 loadCatPicture()
@@ -80,16 +109,15 @@ class MainActivity : AppCompatActivity() {
 
     private fun changeTypeOfAnimal() {
         binding.changeTypeOfAnimalButton.setOnClickListener {
-            if (flag) {
+            if (flagCatOrDog) {
                 binding.changeTypeOfAnimalButton.text = CAT
-                flag = false
+                flagCatOrDog = false
             } else {
                 binding.changeTypeOfAnimalButton.text = DOG
-                flag = true
+                flagCatOrDog = true
             }
         }
     }
-
 
     private fun loadCatPicture() {
         viewModel.getCatImage()
@@ -97,16 +125,11 @@ class MainActivity : AppCompatActivity() {
 
     private fun loadDogPicture() {
         viewModel.getDogImage()
-
     }
 
     private fun funLoadPictureWhenGetOne() {
-        viewModel.dogImageLD.observe(this) {
-            val url = viewModel.dogImageLD.value?.url ?: throw RuntimeException("Url not found")
-            setPicture(url)
-        }
-        viewModel.catImageLD.observe(this) {
-            val url = viewModel.catImageLD.value?.url ?: throw RuntimeException("Url not found")
+        viewModel.imageLD.observe(this) {
+            val url = viewModel.imageLD.value?.url ?: throw RuntimeException("Url not found")
             setPicture(url)
         }
     }

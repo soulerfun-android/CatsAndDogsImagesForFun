@@ -6,7 +6,6 @@ import androidx.recyclerview.widget.ListAdapter
 import com.bumptech.glide.Glide
 import com.example.lelele.R
 import com.example.lelele.domain.entities.ImageItem
-import kotlin.math.truncate
 
 class CollectionAdapter : ListAdapter<ImageItem, CollectionViewHolder>(CollectionDiffCallback()) {
 
@@ -20,15 +19,13 @@ class CollectionAdapter : ListAdapter<ImageItem, CollectionViewHolder>(Collectio
 
     override fun onBindViewHolder(holder: CollectionViewHolder, position: Int) {
         val image = getItem(position)
-        val binding = holder.ivPicture
 
         Glide.with(holder.ivPicture.context)
             .load(image.url)
             .into(holder.ivPicture)
 
-        binding.setOnLongClickListener {
-            onImageItemClickListener
-            true
+        holder.ivPicture.setOnClickListener {
+            onImageItemClickListener?.invoke(image)
         }
     }
 }

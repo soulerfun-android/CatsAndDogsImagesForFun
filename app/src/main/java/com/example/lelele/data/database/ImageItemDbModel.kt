@@ -7,5 +7,5 @@ import androidx.room.PrimaryKey
 data class ImageItemDbModel(
     @PrimaryKey(autoGenerate = true)
     val id: Int,
-    val url: String
+    var url: String
 )

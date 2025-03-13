@@ -1,6 +1,7 @@
-package com.example.lelele.domain
+package com.example.lelele.domain.usecases
 
 import androidx.lifecycle.LiveData
+import com.example.lelele.domain.Repository
 import com.example.lelele.domain.entities.ImageItem
 import javax.inject.Inject
 

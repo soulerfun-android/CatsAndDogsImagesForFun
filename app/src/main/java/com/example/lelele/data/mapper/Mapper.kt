@@ -25,7 +25,7 @@ class Mapper @Inject constructor() {
         return ImageItemDbModel(id = imageItem.id, url = imageItem.url)
     }
 
-    private fun mapDbModelToEntity(imageItem: ImageItemDbModel): ImageItem {
+    fun mapDbModelToEntity(imageItem: ImageItemDbModel): ImageItem {
         return ImageItem(id = imageItem.id, url = imageItem.url)
     }
 
