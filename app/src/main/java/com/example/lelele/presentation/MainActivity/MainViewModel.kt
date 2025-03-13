@@ -1,16 +1,13 @@
 package com.example.lelele.presentation.MainActivity
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.example.lelele.domain.usecases.GetCatImageUseCase
-import com.example.lelele.domain.usecases.GetDogImageUseCase
 import com.example.lelele.domain.entities.ImageItem
 import com.example.lelele.domain.usecases.AddImageUseCase
 import com.example.lelele.domain.usecases.DeleteImageUseCase
-import com.example.lelele.domain.usecases.GetImageItemFromDbUseCase
+import com.example.lelele.domain.usecases.GetCatImageUseCase
+import com.example.lelele.domain.usecases.GetDogImageUseCase
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -24,7 +21,6 @@ class MainViewModel @Inject constructor(
     private val getCatImageUseCase: GetCatImageUseCase,
     private val addImageUseCase: AddImageUseCase,
     private val deleteImageUseCase: DeleteImageUseCase,
-    private val getImageItemFromDbUseCase: GetImageItemFromDbUseCase
 
 ) : ViewModel() {
 
@@ -44,10 +40,6 @@ class MainViewModel @Inject constructor(
     private var _exceptionLD = MutableLiveData<Boolean>()
     val exceptionLD: LiveData<Boolean>
         get() = _exceptionLD
-
-    fun getImageFromDb(imageId: Int): LiveData<ImageItem> {
-        return getImageItemFromDbUseCase.getImageItemFromDb(imageId)
-    }
 
 
     fun getDogImage() {

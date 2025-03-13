@@ -12,7 +12,11 @@ import com.example.lelele.databinding.ActivityMainBinding
 import com.example.lelele.presentation.App
 import com.example.lelele.presentation.ViewModelFactory
 import com.example.lelele.presentation.collectionActivity.CollectionActivity
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import javax.inject.Inject
+import kotlin.concurrent.thread
 
 class MainActivity : AppCompatActivity() {
 
@@ -26,7 +30,6 @@ class MainActivity : AppCompatActivity() {
     lateinit var viewModelFactory: ViewModelFactory
 
     private var flagCatOrDog = true
-    private var flag = true
 
     private val component by lazy {
         (application as App).component
@@ -49,32 +52,20 @@ class MainActivity : AppCompatActivity() {
         launchCollectionScreen()
         showError()
 
-        actionWithCollection()
+        colorStarAndAddImageInDb()
 
-        binding.testButton.setOnClickListener {
-            val d = viewModel.imageLD.value!!
-            Log.d("test", d.toString())
-            viewModel.deleteImage(d.id)
-        }
     }
 
-    private fun actionWithCollection() {
+    private fun colorStarAndAddImageInDb() {
+        Glide.with(this)
+            .load(android.R.drawable.btn_star_big_off)
+            .into(binding.starIv)
         binding.starIv.setOnClickListener {
-            if (flag) {
-                Glide.with(this)
-                    .load(R.drawable.empty_star)
-                    .into(binding.starIv)
-                viewModel.addImage(viewModel.imageLD.value!!)
-                Log.d("MainActivity", "${viewModel.imageLD.value}" )
-                flag = false
-            } else {
-                Glide.with(this)
-                    .load(R.drawable.star)
-                    .into(binding.starIv)
-                viewModel.deleteImage(viewModel.imageLD.value!!.id)
-                Log.d("MainActivity", "${viewModel.imageLD.value}" )
-                flag = true
-            }
+            Glide.with(this)
+                .load(android.R.drawable.btn_star_big_on)
+                .into(binding.starIv)
+            viewModel.addImage(viewModel.imageLD.value!!)
+            binding.starIv.setOnClickListener(null)
         }
     }
 
@@ -126,6 +117,7 @@ class MainActivity : AppCompatActivity() {
         viewModel.imageLD.observe(this) {
             val url = viewModel.imageLD.value?.url ?: throw RuntimeException("Url not found")
             setPicture(url)
+            colorStarAndAddImageInDb()
         }
     }
 

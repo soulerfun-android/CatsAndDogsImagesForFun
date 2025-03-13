@@ -37,12 +37,6 @@ class RepositoryImpl @Inject constructor(
         imageListDao.addImageItem(mapper.mapEntityToDbModel(image))
     }
 
-    override fun getImageItem(imageId: Int): LiveData<ImageItem> {
-        return imageListDao.getImageItem(imageId).map {
-            mapper.mapDbModelToEntity(it)
-        }
-    }
-
     override fun getImageList(): LiveData<List<ImageItem>> = imageListDao.getImageList().map {
         mapper.mapListDbModelToListEntity(it)
     }

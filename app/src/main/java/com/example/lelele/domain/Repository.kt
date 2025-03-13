@@ -12,7 +12,5 @@ interface Repository {
 
     fun addImage(image: ImageItem)
 
-    fun getImageItem(imageId: Int): LiveData<ImageItem>
-
     fun getImageList(): LiveData<List<ImageItem>>
 }
